@@ -1,0 +1,833 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cloud of Flowers — Украшения ручной работы</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+    <style>
+        /* ==================== ПАЛИТРА И СТИЛИ ==================== */
+        :root {
+            --bg-color: #faf8f5;         /* Теплый молочно-бежевый */
+            --card-bg: #ffffff;
+            --text-main: #4a4a4a;       /* Мягкий серый для текста */
+            --accent-blue: #dceaf2;     /* Пастельный светло-голубой */
+            --accent-pink: #f7e3e7;     /* Пастельный розовый */
+            --accent-hover: #edd3d8;
+            --border-color: #f0e6e6;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* ==================== ШАПКА И НАВИГАЦИЯ ==================== */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: rgba(250, 248, 245, 0.95);
+            backdrop-filter: blur(8px);
+            border-bottom: 1px solid var(--border-color);
+            padding: 15px 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .logo {
+            font-size: 1.3rem;
+            font-weight: 500;
+            letter-spacing: 1px;
+            color: #333;
+            text-decoration: none;
+        }
+
+        .menu-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 5px;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            z-index: 1002;
+        }
+
+        .menu-btn span {
+            display: block;
+            width: 24px;
+            height: 2px;
+            background-color: var(--text-main);
+            transition: all 0.3s ease;
+        }
+
+        /* Выдвижное меню */
+        .side-menu {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 280px;
+            height: 100%;
+            background-color: var(--card-bg);
+            box-shadow: -5px 0 25px rgba(0,0,0,0.05);
+            padding: 80px 30px 30px 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            transition: right 0.4s ease;
+            z-index: 1001;
+        }
+
+        .side-menu.active {
+            right: 0;
+        }
+
+        .side-menu a {
+            text-decoration: none;
+            color: var(--text-main);
+            font-size: 1.1rem;
+            font-weight: 400;
+            transition: color 0.2s;
+        }
+
+        .side-menu a:hover {
+            color: #b08d93;
+        }
+
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.2);
+            display: none;
+            z-index: 1000;
+        }
+
+        .overlay.active {
+            display: block;
+        }
+
+        /* ==================== ОСНОВНОЙ КОНТЕНТ ==================== */
+        container {
+            display: block;
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 100px 20px 60px 20px;
+        }
+
+        /* Главный баннер */
+        .hero {
+            text-align: center;
+            padding: 40px 20px;
+            margin-bottom: 40px;
+            background: linear-gradient(135deg, var(--accent-blue), var(--accent-pink));
+            border-radius: 20px;
+        }
+
+        .hero h1 {
+            font-size: 2.2rem;
+            font-weight: 300;
+            margin-bottom: 10px;
+            letter-spacing: 2px;
+        }
+
+        .hero p {
+            font-size: 1rem;
+            opacity: 0.85;
+            font-weight: 300;
+        }
+
+        /* Заголовки секций */
+        .section-title {
+            text-align: center;
+            font-size: 1.6rem;
+            font-weight: 400;
+            margin: 50px 0 25px 0;
+            letter-spacing: 1px;
+            position: relative;
+        }
+
+        /* Быстрая навигация по ассортименту */
+        .categories-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+            gap: 12px;
+            margin-bottom: 40px;
+        }
+
+        .category-chip {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            padding: 12px 10px;
+            border-radius: 12px;
+            text-align: center;
+            text-decoration: none;
+            color: var(--text-main);
+            font-size: 0.85rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.02);
+        }
+
+        .category-chip:hover {
+            background-color: var(--accent-pink);
+            border-color: var(--accent-pink);
+            transform: translateY(-2px);
+        }
+
+        /* Блок Обо мне */
+        .about-card {
+            background: var(--card-bg);
+            padding: 30px;
+            border-radius: 16px;
+            border: 1px solid var(--border-color);
+            margin-bottom: 40px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        @media (min-width: 768px) {
+            .about-card {
+                flex-direction: row;
+                align-items: center;
+            }
+        }
+
+        .about-photo {
+            width: 100%;
+            max-width: 280px;
+            border-radius: 14px;
+            object-fit: cover;
+            margin: 0 auto;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+
+        .about-text {
+            flex: 1;
+        }
+
+        .about-card h3 {
+            font-weight: 500;
+            margin-bottom: 15px;
+            color: #6a8292;
+            font-size: 1.3rem;
+        }
+
+        .about-card p {
+            margin-bottom: 15px;
+            font-size: 0.95rem;
+            line-height: 1.7;
+        }
+
+        /* Блок Цен и прайса */
+        .price-overview {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 30px;
+            border: 1px solid var(--border-color);
+            margin-bottom: 40px;
+        }
+
+        .price-image-container {
+            width: 100%;
+            overflow: hidden;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+
+        .price-image-container img {
+            width: 100%;
+            height: auto;
+            display: block;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .price-image-container img:hover {
+            transform: scale(1.01);
+        }
+
+        /* Галерея каталога с ценниками */
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            gap: 15px;
+            margin-bottom: 40px;
+        }
+
+        @media (min-width: 600px) {
+            .gallery-grid {
+                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            }
+        }
+
+        .gallery-item {
+            position: relative;
+            aspect-ratio: 1 / 1;
+            border-radius: 12px;
+            overflow: hidden;
+            background: #eee;
+            cursor: pointer;
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .gallery-item:hover img {
+            transform: scale(1.05);
+        }
+
+        /* Стиль для плашки с ценой */
+        .price-badge {
+            position: absolute;
+            bottom: 8px;
+            right: 8px;
+            background: rgba(255, 255, 255, 0.92);
+            color: #333;
+            padding: 4px 10px;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+            backdrop-filter: blur(4px);
+            z-index: 2;
+        }
+
+        /* Блоки Уход и Доставка */
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .info-box {
+            background: var(--card-bg);
+            padding: 25px;
+            border-radius: 16px;
+            border: 1px solid var(--border-color);
+        }
+
+        .info-box h3 {
+            margin-bottom: 12px;
+            font-weight: 500;
+        }
+
+        .info-box ul {
+            padding-left: 20px;
+            font-size: 0.9rem;
+        }
+
+        .info-box li {
+            margin-bottom: 8px;
+        }
+
+        /* Ссылки на соцсети */
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+
+        .social-btn {
+            display: inline-block;
+            padding: 12px 24px;
+            background: var(--accent-pink);
+            color: var(--text-main);
+            text-decoration: none;
+            border-radius: 25px;
+            font-size: 0.9rem;
+            transition: background 0.3s;
+        }
+
+        .social-btn:hover {
+            background: var(--accent-hover);
+        }
+
+        /* ==================== МОДАЛЬНОЕ ОКНО (LIGHTBOX) ==================== */
+        .lightbox {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.85);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            padding: 20px;
+        }
+
+        .lightbox.active {
+            display: flex;
+        }
+
+        .lightbox-content {
+            max-width: 90%;
+            max-height: 85vh;
+            border-radius: 8px;
+            object-fit: contain;
+        }
+
+        .lightbox-close {
+            position: absolute;
+            top: 20px;
+            right: 25px;
+            color: #fff;
+            font-size: 2rem;
+            cursor: pointer;
+            line-height: 1;
+        }
+
+        /* Подвал */
+        footer {
+            text-align: center;
+            padding: 30px;
+            font-size: 0.8rem;
+            opacity: 0.7;
+            border-top: 1px solid var(--border-color);
+        }
+
+        /* ==================== АНИМАЦИИ ПРИ СКРОЛЛЕ ==================== */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <a href="#" class="logo">Cloud of Flowers</a>
+        <button class="menu-btn" id="menuBtn" aria-label="Открыть меню">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+    </header>
+
+    <div class="overlay" id="overlay"></div>
+    <nav class="side-menu" id="sideMenu">
+        <a href="#about" class="menu-link">Обо мне</a>
+        <a href="#pricing" class="menu-link">Прайс</a>
+        <a href="#catalog" class="menu-link">Каталог</a>
+        <a href="#care" class="menu-link">Уход за украшениями</a>
+        <a href="#delivery" class="menu-link">Доставка</a>
+        <a href="#contacts" class="menu-link">Контакты</a>
+    </nav>
+
+    <container>
+        
+        <section class="hero reveal">
+            <h1>Cloud of Flowers</h1>
+            <p>Авторские украшения ручной работы</p>
+        </section>
+
+        <!-- Быстрая навигация по актуальному ассортименту -->
+        <div class="categories-grid reveal">
+            <a href="#earrings" class="category-chip">Серьги</a>
+            <a href="#rings" class="category-chip">Кольца</a>
+            <a href="#pendants" class="category-chip">Кулоны</a>
+            <a href="#bracelets" class="category-chip">Браслеты</a>
+            <a href="#charms" class="category-chip">Обвесы</a>
+        </div>
+
+        <section id="about" class="about-card reveal">
+            <img src="profile.png" alt="Мастерица Кристина" class="about-photo">
+            <div class="about-text">
+                <h3>Добро пожаловать в мою маленькую творческую мастерскую! ✨</h3>
+                <p><strong>Познакомимся?</strong> Меня зовут Кристина, и я создаю украшения ручной работы, которые подойдут для любого мероприятия: от повседневного образа до особенного торжества.</p>
+                <p>В моем арсенале несколько техник, чтобы каждая из вас нашла что-то по душе. 💫</p>
+                <p>В основе многих работ лежит <strong>эпоксидная смола</strong>: я «консервирую» в ней природную красоту, используя сухоцветы — от легких пушинок одуванчиков до нежных хризантем и гортензий.</p>
+                <p>Но я не останавливаюсь на одном материале! Помимо смолы, я работаю с <strong>натуральными камнями и стеклом</strong>, создавая из них бусы, кулоны, серьги, браслеты и стильные обвесы. Также я увлекаюсь работой с <strong>глиной</strong> — в этой технике я делаю бусины и уникальные обвесы с изображениями ваших любимых питомцев. 🐾</p>
+                <p><strong>Что вы можете выбрать?</strong><br> Вы можете приобрести готовые изделия из наличия (актуальная информация в сториз или специальном разделе) или же заказать украшение "под заказ" - вместе мы воплотим вашу идею в жизнь!</p>
+                <p>Все мои работы созданы вручную, с огромной любовью и вдохновением. А в свободное время я люблю переключаться на другие виды творчества: создаю картины из нитей, плету ковры или отливаю луну из гипса — ведь творчество не знает границ! 🌙</p>
+                <p>Надеюсь, что каждое мое украшение подарит вам радость и станет вашим маленьким талисманом. Спасибо, что заглянули! ✨</p>
+            </div>
+        </section>
+
+        <!-- Единый горизонтальный прайс -->
+        <section id="pricing" class="price-overview reveal">
+            <h2 class="section-title">Прайс работ</h2>
+            <p style="text-align: center; margin-bottom: 15px; font-size: 0.9rem; opacity: 0.8;">
+                Нажмите на изображение прайса, чтобы открыть его на весь экран:
+            </p>
+            <div class="price-image-container">
+                <img src="price.png" alt="Прайс-лист Cloud of Flowers" onclick="openLightbox(this.src)">
+            </div>
+        </section>
+
+        <section id="catalog">
+            <h2 class="section-title reveal">Примеры работ</h2>
+
+            <!-- Серьги -->
+            <h3 id="earrings" class="reveal" style="margin: 20px 0 10px; font-weight: 400;">Серьги</h3>
+            <div class="gallery-grid reveal">
+                <!-- Первые зеленые серьги-листочки -->
+                <div class="gallery-item">
+                    <img src="work1.png" alt="Серьги-листочки" onclick="openLightbox(this.src)">
+                    <span class="price-badge">1600 ₽</span>
+                </div>
+                <div class="gallery-item">
+                    <img src="work3.png" alt="Серьги шарики" onclick="openLightbox(this.src)">
+                    <span class="price-badge">900 ₽</span>
+                </div>
+                <div class="gallery-item">
+                    <img src="work4.png" alt="Пусеты" onclick="openLightbox(this.src)">
+                    <span class="price-badge">400 ₽</span>
+                </div>
+                <div class="gallery-item">
+                    <img src="work5.png" alt="Серьги круглые" onclick="openLightbox(this.src)">
+                    <span class="price-badge">400 ₽</span>
+                </div>
+                <div class="gallery-item">
+                    <img src="work6.png" alt="Серьги с цветами" onclick="openLightbox(this.src)">
+                </div>
+                <div class="gallery-item">
+                    <img src="work7.png" alt="Серьги с цветами" onclick="openLightbox(this.src)">
+                    <span class="price-badge">450 ₽</span>
+                </div>
+                <div class="gallery-item">
+                    <img src="work9.png" alt="Геометрические серьги" onclick="openLightbox(this.src)">
+                    <span class="price-badge">650 ₽</span>
+                </div>
+                <div class="gallery-item">
+                    <img src="work10.png" alt="Серьги листья" onclick="openLightbox(this.src)">
+                    <span class="price-badge">650 ₽</span>
+                </div>
+                <div class="gallery-item">
+                    <img src="work11.png" alt="Серьги зеленые" onclick="openLightbox(this.src)">
+                    <span class="price-badge">650 ₽</span>
+                </div>
+                <!-- Вторые зеленые серьги-листики -->
+                <div class="gallery-item">
+                    <img src="work2.png" alt="Серьги-листочки" onclick="openLightbox(this.src)">
+                    <span class="price-badge">1600 ₽</span>
+                </div>
+                <div class="gallery-item">
+                    <img src="work12.png" alt="Серьги бусины" onclick="openLightbox(this.src)">
+                    <span class="price-badge">650 ₽</span>
+                </div>
+                <div class="gallery-item">
+                    <img src="work13.png" alt="Серьги с вишней" onclick="openLightbox(this.src)">
+                    <span class="price-badge">650 ₽</span>
+                </div>
+                <div class="gallery-item">
+                    <img src="work14.png" alt="Серьги вишенки" onclick="openLightbox(this.src)">
+                    <span class="price-badge">1100 ₽</span>
+                </div>
+            </div>
+
+            <!-- Кольца -->
+            <h3 id="rings" class="reveal" style="margin: 20px 0 10px; font-weight: 400;">Кольца</h3>
+            <div class="gallery-grid reveal">
+                <div class="gallery-item"><img src="work16.png" alt="Кольцо" onclick="openLightbox(this.src)"></div>
+                <div class="gallery-item">
+                    <img src="work17.png" alt="Кольцо с цветком" onclick="openLightbox(this.src)">
+                    <span class="price-badge">850 ₽</span>
+                </div>
+                <div class="gallery-item">
+                    <img src="work18.png" alt="Кольцо круглые цветы" onclick="openLightbox(this.src)">
+                    <span class="price-badge">850 ₽</span>
+                </div>
+                <div class="gallery-item">
+                    <img src="work19.png" alt="Кольцо изящное" onclick="openLightbox(this.src)">
+                    <span class="price-badge">450 ₽</span>
+                </div>
+                <div class="gallery-item">
+                    <img src="work20.png" alt="Кольцо синее" onclick="openLightbox(this.src)">
+                    <span class="price-badge">900 ₽</span>
+                </div>
+                <div class="gallery-item">
+                    <img src="work21.png" alt="Кольцо лист" onclick="openLightbox(this.src)">
+                    <span class="price-badge">1000 ₽</span>
+                </div>
+            </div>
+
+            <!-- Кулоны и Бусы -->
+            <h3 id="pendants" class="reveal" style="margin: 20px 0 10px; font-weight: 400;">Кулоны и Бусы</h3>
+            <div class="gallery-grid reveal">
+                <div class="gallery-item">
+                    <img src="work22.png" alt="Красные бусы" onclick="openLightbox(this.src)">
+                    <span class="price-badge">1200 ₽</span>
+                </div>
+                <div class="gallery-item">
+                    <img src="work40.png" alt="Обвес с листиком" onclick="openLightbox(this.src)">
+                    <span class="price-badge">3400 ₽</span>
+                </div>
+                <div class="gallery-item">
+                    <img src="work23.png" alt="Кулон на девушке" onclick="openLightbox(this.src)">
+                    <span class="price-badge">1600 ₽</span>
+                </div>
+                <div class="gallery-item">
+                    <img src="work24.png" alt="Разноцветное колье" onclick="openLightbox(this.src)">
+                    <span class="price-badge">1200 ₽</span>
+                </div>
+                <div class="gallery-item">
+                    <img src="work25.png" alt="Жемчужный кулон" onclick="openLightbox(this.src)">
+                    <span class="price-badge">950 ₽</span>
+                </div>
+                <div class="gallery-item">
+                    <img src="work26.png" alt="Серое колье" onclick="openLightbox(this.src)">
+                    <span class="price-badge">1200 ₽</span>
+                </div>
+                <div class="gallery-item">
+                    <img src="work27.png" alt="Сердечко на шею" onclick="openLightbox(this.src)">
+                    <span class="price-badge">1100 ₽</span>
+                </div>
+                <div class="gallery-item">
+                    <img src="work28.png" alt="Колье с буквами" onclick="openLightbox(this.src)">
+                    <span class="price-badge">1300 ₽</span>
+                </div>
+                <div class="gallery-item">
+                    <img src="work29.png" alt="Кулон розовый" onclick="openLightbox(this.src)">
+                    <span class="price-badge">800 ₽</span>
+                </div>
+                <div class="gallery-item">
+                    <img src="work30.png" alt="Салатовое колье" onclick="openLightbox(this.src)">
+                    <span class="price-badge">1100 ₽</span>
+                </div>
+                <div class="gallery-item">
+                    <img src="work31.png" alt="Сиреневое колье" onclick="openLightbox(this.src)">
+                    <span class="price-badge">1300 ₽</span>
+                </div>
+                <div class="gallery-item">
+                    <img src="work32.png" alt="Сердечки" onclick="openLightbox(this.src)">
+                    <span class="price-badge">950 ₽</span>
+                </div>
+                <div class="gallery-item">
+                    <img src="work33.png" alt="Бусы с ракушкой" onclick="openLightbox(this.src)">
+                    <span class="price-badge">2500 ₽</span>
+                </div>
+                <div class="gallery-item">
+                    <img src="work34.png" alt="Колье из камней" onclick="openLightbox(this.src)">
+                    <span class="price-badge">2600 ₽</span>
+                </div>
+                <div class="gallery-item">
+                    <img src="work35.png" alt="Авторское колье" onclick="openLightbox(this.src)">
+                    <span class="price-badge">1500 ₽</span>
+                </div>
+                <div class="gallery-item">
+                    <img src="work36.png" alt="Колье с яблочками" onclick="openLightbox(this.src)">
+                    <span class="price-badge">1700 ₽</span>
+                </div>
+            </div>
+
+            <!-- Браслеты -->
+            <h3 id="bracelets" class="reveal" style="margin: 20px 0 10px; font-weight: 400;">Браслеты</h3>
+            <div class="gallery-grid reveal">
+                <div class="gallery-item">
+                    <img src="work48.png" alt="Браслет с цветочком" onclick="openLightbox(this.src)">
+                    <span class="price-badge">550 ₽</span>
+                </div>
+                <div class="gallery-item">
+                    <img src="work49.png" alt="Браслет пастельный" onclick="openLightbox(this.src)">
+                    <span class="price-badge">1100 ₽</span>
+                </div>
+                <div class="gallery-item">
+                    <img src="work50.png" alt="Браслет яркий" onclick="openLightbox(this.src)">
+                    <span class="price-badge">950 ₽</span>
+                </div>
+                <div class="gallery-item">
+                    <img src="work51.png" alt="Браслет с цветами" onclick="openLightbox(this.src)">
+                    <span class="price-badge">900 ₽</span>
+                </div>
+                <div class="gallery-item">
+                    <img src="work52.png" alt="Серебристый браслет" onclick="openLightbox(this.src)">
+                    <span class="price-badge">750 ₽</span>
+                </div>
+                <div class="gallery-item">
+                    <img src="work53.png" alt="Красный браслет" onclick="openLightbox(this.src)">
+                    <span class="price-badge">750 ₽</span>
+                </div>
+                <div class="gallery-item">
+                    <img src="work54.png" alt="Желтые браслеты" onclick="openLightbox(this.src)">
+                    <span class="price-badge">650 ₽</span>
+                </div>
+            </div>
+
+            <!-- Обвесы -->
+            <h3 id="charms" class="reveal" style="margin: 20px 0 10px; font-weight: 400;">Обвесы (классические и с питомцами)</h3>
+            <div class="gallery-grid reveal">
+                <div class="gallery-item">
+                    <img src="work37.png" alt="Розовый обвес" onclick="openLightbox(this.src)">
+                    <span class="price-badge">1200 ₽</span>
+                </div>
+                <div class="gallery-item">
+                    <img src="work38.png" alt="Обвес с девой" onclick="openLightbox(this.src)">
+                    <span class="price-badge">1200 ₽</span>
+                </div>
+                <div class="gallery-item">
+                    <img src="work39.png" alt="Обвес с лошадкой" onclick="openLightbox(this.src)">
+                    <span class="price-badge">1200 ₽</span>
+                </div>
+                
+                <div class="gallery-item">
+                    <img src="work41.png" alt="Красный обвес с фигурой" onclick="openLightbox(this.src)">
+                    <span class="price-badge">1500 ₽</span>
+                </div>
+                <div class="gallery-item">
+                    <img src="work42.png" alt="Обвес лягушонок" onclick="openLightbox(this.src)">
+                    <span class="price-badge">1500 ₽</span>
+                </div>
+                <div class="gallery-item">
+                    <img src="work43.png" alt="Обвес Корги" onclick="openLightbox(this.src)">
+                    <span class="price-badge">1500 ₽</span>
+                </div>
+                <div class="gallery-item">
+                    <img src="work44.png" alt="Обвес с котиком" onclick="openLightbox(this.src)">
+                    <span class="price-badge">1500 ₽</span>
+                </div>
+                <div class="gallery-item">
+                    <img src="work45.png" alt="Обвес с собакой" onclick="openLightbox(this.src)">
+                    <span class="price-badge">1500 ₽</span>
+                </div>
+                <div class="gallery-item">
+                    <img src="work46.png" alt="Обвес брелок" onclick="openLightbox(this.src)">
+                    <span class="price-badge">1500 ₽</span>
+                </div>
+                <div class="gallery-item">
+                    <img src="work47.png" alt="Обвес подвес" onclick="openLightbox(this.src)">
+                    <span class="price-badge">1500 ₽</span>
+                </div>
+            </div>
+        </section>
+
+        <div class="info-grid">
+            <section id="care" class="info-box reveal">
+                <h3>Уход за украшениями</h3>
+                <ul>
+                    <li>Храните изделия в сухом месте, желательно отдельно от других металлических предметов.</li>
+                    <li>Избегайте прямого контакта с парфюмерией, спиртовыми растворами и бытовой химией.</li>
+                    <li>Протирайте изделия мягкой сухой салфеткой (микрофиброй).</li>
+                    <li>Изделия из глины не рекомендуется погружать в воду на долгое время.</li>
+                </ul>
+            </section>
+
+            <section id="delivery" class="info-box reveal">
+                <h3>Доставка и Заказ</h3>
+                <ul>
+                    <li><strong>Изготовление:</strong> индивидуальные заказы выполняются от 3 до 7 дней.</li>
+                    <li><strong>Доставка:</strong> Почта России, СДЭК, Яндекс Доставка.</li>
+                    <li><strong>Оформление:</strong> напишите мне в удобную соцсеть для обсуждения деталей и отправки референсов/фото.</li>
+                </ul>
+            </section>
+        </div>
+
+        <section id="contacts" class="reveal" style="text-align: center; margin: 40px 0;">
+            <h2 class="section-title">Связаться со мной</h2>
+            <p>Выберите удобный способ связи для заказа или уточнения деталей:</p>
+            <div class="social-links">
+                <a href="https://vk.ru/cloud_of_flowers" target="_blank" class="social-btn">ВКонтакте</a>
+                <a href="https://www.threads.com/@cloud_of_flower?igshid=NTc4MTIwNjQ2YQ==" target="_blank" class="social-btn">Threads</a>
+                <a href="https://www.instagram.com/cloud_of_flower?igsi=emwxZ3dtbGRjYWh3&utm_source=qr" target="_blank" class="social-btn">Instagram</a>
+            </div>
+        </section>
+
+    </container>
+
+    <footer>
+        <p>&copy; Cloud of Flowers. Все права защищены.</p>
+    </footer>
+
+    <div class="lightbox" id="lightbox" onclick="closeLightbox()">
+        <span class="lightbox-close">&times;</span>
+        <div id="lightboxMediaContainer" onclick="event.stopPropagation()"></div>
+    </div>
+
+    <script>
+        // Переключение Меню
+        const menuBtn = document.getElementById('menuBtn');
+        const sideMenu = document.getElementById('sideMenu');
+        const overlay = document.getElementById('overlay');
+        const menuLinks = document.querySelectorAll('.menu-link');
+
+        function toggleMenu() {
+            sideMenu.classList.toggle('active');
+            overlay.classList.toggle('active');
+        }
+
+        menuBtn.addEventListener('click', toggleMenu);
+        overlay.addEventListener('click', toggleMenu);
+
+        menuLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                sideMenu.classList.remove('active');
+                overlay.classList.remove('active');
+            });
+        });
+
+        // Открытие Модального окна (Фото)
+        const lightbox = document.getElementById('lightbox');
+        const lightboxContainer = document.getElementById('lightboxMediaContainer');
+
+        function openLightbox(src) {
+            lightboxContainer.innerHTML = '';
+            
+            const img = document.createElement('img');
+            img.src = src;
+            img.className = 'lightbox-content';
+            lightboxContainer.appendChild(img);
+            
+            lightbox.classList.add('active');
+        }
+
+        function closeLightbox() {
+            lightbox.classList.remove('active');
+            lightboxContainer.innerHTML = '';
+        }
+
+        // Анимация появлений при скролле
+        const observerOptions = {
+            root: null,
+            threshold: 0.15
+        };
+
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.reveal').forEach(el => {
+            observer.observe(el);
+        });
+    </script>
+</body>
+</html>
+
